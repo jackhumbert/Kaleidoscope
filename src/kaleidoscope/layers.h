@@ -121,6 +121,7 @@ class Layer_ {
   DEPRECATED(LAYER_DEACTIVATE_MOST_RECENT)
   static void deactivateMostRecent();
   static void move(uint8_t layer);
+  static void insert(uint8_t index, uint8_t layer);
 
   static uint8_t mostRecent() {
     uint8_t top_layer = active_layers_[active_layer_count_ - 1];

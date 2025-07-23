@@ -223,6 +223,28 @@ void Layer_::remove(uint8_t i) {
   --active_layer_count_;
 }
 
+void Layer_::insert(uint8_t index, uint8_t layer) {
+  if (active_layer_count_ < index)
+    return;
+
+  int8_t old_pos = stackPosition(layer);
+  if (old_pos >= 0) {
+    remove(old_pos);
+  }
+
+  while (active_layer_count_ >= MAX_ACTIVE_LAYERS) {
+    remove(0);
+  }
+
+  memmove(&active_layers_[index + 1], &active_layers_[index], active_layer_count_ - index);
+  active_layers_[index] = layer;
+  active_layer_count_++;
+  
+  updateActiveLayers();
+
+  kaleidoscope::Hooks::onLayerChange();
+}
+
 // Deactivate a given layer
 void Layer_::deactivate(uint8_t layer) {
   int8_t current_pos = stackPosition(layer);
